@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <h1>Submitted Events</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Link</th>
+                <th>Image</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% events.forEach(event => { %>
+                <tr>
+                    <td><%= event.title %></td>
+                    <td><%= event.description %></td>
+                    <td><%= event.startDate.toDateString() %></td>
+                    <td><%= event.endDate.toDateString() %></td>
+                    <td><a href="<%= event.registrationLink %>" target="_blank">View</a></td>
+                    <td><img src="<%= event.image %>" alt="Event Image" width="100"></td>
+                    <td><%= event.status %></td>
+                    <td>
+                        <% if (event.status === 'Pending') { %>
+                            <form action="/admin/events/<%= event._id %>" method="POST" style="display:inline;">
+                                <input type="hidden" name="status" value="Approved">
+                                <button type="submit">Approve</button>
+                            </form>
+                            <form action="/admin/events/<%= event._id %>" method="POST" style="display:inline;">
+                                <input type="hidden" name="status" value="Rejected">
+                                <button type="submit">Reject</button>
+                            </form>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>
